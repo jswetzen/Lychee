@@ -32,6 +32,7 @@ class Admin extends Access {
 			case 'Photo::setPublic':		$this->setPhotoPublic(); break;
 			case 'Photo::setAlbum':			$this->setPhotoAlbum(); break;
 			case 'Photo::setTags':			$this->setPhotoTags(); break;
+			case 'Photo::rotate':			$this->rotatePhoto(); break;
 			case 'Photo::duplicate':		$this->duplicatePhoto(); break;
 			case 'Photo::delete':			$this->deletePhoto(); break;
 
@@ -187,6 +188,14 @@ class Admin extends Access {
 		Module::dependencies(isset($_POST['photoIDs'], $_POST['tags']));
 		$photo = new Photo($this->database, $this->plugins, null, $_POST['photoIDs']);
 		echo $photo->setTags($_POST['tags']);
+
+	}
+
+	private function rotatePhoto() {
+
+		Module::dependencies(isset($_POST['photoIDs']));
+		$photo = new Photo($this->database, $this->plugins, null, $_POST['photoIDs']);
+		echo $photo->rotate();
 
 	}
 

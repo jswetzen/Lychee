@@ -396,7 +396,7 @@ photo.setStar = function(photoIDs) {
 		photoIDs: photoIDs.join()
 	}
 
-	api.post('Photo::setStar', params, function(data) {
+	api.post('Photo::rotate', params, function(data) {
 
 		if (data!==true) lychee.error(null, params, data)
 
@@ -656,4 +656,27 @@ photo.getViewLink = function(photoID) {
 	if (location.href.indexOf('index.html')>0) return location.href.replace('index.html' + location.hash, url)
 	else                                       return location.href.replace(location.hash, url)
 
+}
+
+photo.rotate = function(photoID, clockwise) {
+
+	if (clockwise) var angle = 90
+	else           var angle = -90
+
+	if (album.json.content[photoID].angle) album.json.content[photoID].angle += angle
+	else                                   album.json.content[photoID].angle = angle
+
+	let img = $('div[data-id=' + photoID + '] > img')
+	img.css('transform', 'rotate(' + album.json.content[photoID].angle + 'deg)')
+
+	let params = {
+		photoIDs: [photoID],
+		clockwise: clockwise,
+	}
+
+	api.post('Photo::rotate', params, function(data) {
+
+		if (data!==true) lychee.error(null, params, data)
+
+	})
 }

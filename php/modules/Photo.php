@@ -1126,6 +1126,50 @@ class Photo extends Module {
 
 	}
 
+	public function rotate($clockwise) {
+
+		# Functions rotates a photo
+		# Returns the following:
+		# (boolean) true = Success
+		# (boolean) false = Failure
+
+		# Check dependencies
+		self::dependencies(isset($this->database, $this->photoIDs));
+
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
+
+		# Init vars
+		$error	= false;
+
+		# Get photos
+		$query	= Database::prepare($this->database, "SELECT id, url FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
+		$photos	= $this->database->query($query);
+
+		# For each photo
+		while ($photo = $photos->fetch_object()) {
+
+			# Invert star
+			$star = ($photo->star==0 ? 1 : 0);
+
+			# Set star
+			$query	= Database::prepare($this->database, "UPDATE ? SET star = '?' WHERE id = '?'", array(LYCHEE_TABLE_PHOTOS, $star, $photo->id));
+			$star	= $this->database->query($query);
+			if (!$star) $error = true;
+
+		}
+
+		# Call plugins
+		$this->plugins(__METHOD__, 1, func_get_args());
+
+		if ($error===true) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
+		return true;
+
+	}
+
 	public function duplicate() {
 
 		# Functions duplicates a photo

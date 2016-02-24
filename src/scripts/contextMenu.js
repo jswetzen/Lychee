@@ -156,6 +156,8 @@ contextMenu.photo = function(photoID, e) {
 	let items = [
 		{ title: build.iconic('star') + 'Star', fn: () => photo.setStar([photoID]) },
 		{ title: build.iconic('tag') + 'Tags', fn: () => photo.editTags([photoID]) },
+		{ title: build.iconic('action-redo') + 'Rotate clockwise', fn: () => photo.rotate([photoID], true) },
+		{ title: build.iconic('action-undo') + 'Rotate counterclockwise', fn: () => photo.rotate([photoID], false) },
 		{ },
 		{ title: build.iconic('pencil') + 'Rename', fn: () => photo.setTitle([photoID]) },
 		{ title: build.iconic('layers') + 'Duplicate', fn: () => photo.duplicate([photoID]) },
